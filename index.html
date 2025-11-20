@@ -1100,6 +1100,9 @@
                     (name1.toLowerCase().includes('ripa') && name2.toLowerCase().includes('abuhurira')) || 
                     (name1.toLowerCase().includes('abuhurira') && name2.toLowerCase().includes('ripa'))) {
                     return 100;
+					if ((name1.toLowerCase().includes('vabna') && name2.toLowerCase().includes('ratim')) ||
+						(name1.toLowerCase().includes('ratim') && name2.toLowerCase().includes('vabna')) ||
+					return 90;
                 }
                 
                 // Advanced algorithm for calculating love compatibility
