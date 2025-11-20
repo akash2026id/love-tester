@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Me - Love Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffafaf);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: White;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            border: none;
+            background: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* User Panel Styles */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .hearts-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0.3;
+            color: #ff6b6b;
+            font-size: 20px;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .photo-upload-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #ffb8b8;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff5f5;
+            position: relative;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 3rem;
+            color: #ffb8b8;
+        }
+
+        .upload-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .upload-btn:hover {
+            background: #ff5252;
+        }
+
+        .name-inputs {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            max-width: 250px;
+            padding: 15px 20px;
+            border: 2px solid #ffb8b8;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+            display: none;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .couple-photos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .couple-photos img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffb8b8;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .heart-connector {
+            font-size: 2rem;
+            color: #ff6b6b;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .percentage {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin: 20px 0;
+            text-shadow: 3px 3px 0px rgba(255, 107, 107, 0.2);
+        }
+
+        .message {
+            font-size: 1.5rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 2s ease-in-out;
+        }
+
+        .animation-area {
+            height: 150px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .heart-animation {
+            position: absolute;
+            font-size: 40px;
+            color: #ff6b6b;
+            opacity: 0;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .tips-section {
+            margin-top: 30px;
+            text-align: left;
+            background: #fff5f5;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .tips-section h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .tips-list {
+            list-style-type: none;
+        }
+
+        .tips-list li {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: pink;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .tips-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .tips-list li:before {
+            content: "💖";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: black;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .love-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .love-animation.active {
+            opacity: 1;
+        }
+
+        .love-particle {
+            position: absolute;
+            font-size: 24px;
+            color: #ff6b6b;
+            opacity: 0;
+        }
+
+        @keyframes loveFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .photo-frame {
+            position: relative;
+            display: inline-block;
+        }
+
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffafaf);
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Admin Panel Styles */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            visibility: hidden;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .admin-content {
+            padding: 30px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .filter-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table th {
+            background: #ff6b6b;
+            color: white;
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background: #fff5f5;
+        }
+
+        .user-photos {
+            display: flex;
+            gap: 10px;
+        }
+
+        .user-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffb8b8;
+        }
+
+        .percentage-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .device-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        /* Passcode Modal Styles */
+        .passcode-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .passcode-modal.active {
+            display: flex;
+        }
+
+        .passcode-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .passcode-container h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .passcode-input {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #ffb8b8;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .passcode-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .passcode-error {
+            color: #ff6b6b;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .percentage {
+                font-size: 4rem;
+            }
+            
+            .photo-upload-section, .name-inputs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .couple-photos {
+                flex-direction: column;
+            }
+            
+            .heart-connector {
+                transform: rotate(90deg);
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-input {
+                min-width: 100%;
+            }
+            
+            .data-table {
+                font-size: 0.8rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Love Me - Make By Mr. Abuhurira</h1>
+        <p>Test Your Feeling person and Check your True Love.</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+        <button class="tab-btn active" data-tab="user-panel">Love Tester</button>
+        <button class="tab-btn" data-tab="admin-panel">Akash Personal</button>
+    </div>
+
+    <!-- User Panel -->
+    <div class="tab-content active" id="user-panel">
+        <div class="container">
+            <div class="hearts-bg" id="hearts-bg"></div>
+            <div class="love-animation" id="love-animation"></div>
+            
+            <p class="tagline">Discover your true love compatibility with photos</p>
+            
+            <div class="input-section">
+                <div class="photo-upload-section">
+                    <div class="photo-upload">
+                        <div class="photo-frame">
+                            <div class="photo-preview" id="photo-preview-1">
+                                <div class="photo-placeholder">👤</div>
+                            </div>
+                        </div>
+                        <input type="file" id="photo-upload-1" accept="image/*" style="display: none;">
+                        <button class="upload-btn" id="upload-btn-1">Upload Photo 1</button>
+                    </div>
+                    
+                    <div class="photo-upload">
+                        <div class="photo-frame">
+                            <div class="photo-preview" id="photo-preview-2">
+                                <div class="photo-placeholder">👤</div>
+                            </div>
+                        </div>
+                        <input type="file" id="photo-upload-2" accept="image/*" style="display: none;">
+                        <button class="upload-btn" id="upload-btn-2">Upload Photo 2</button>
+                    </div>
+                </div>
+                
+                <div class="name-inputs">
+                    <div class="input-group">
+                        <label for="name1">Your Name</label>
+                        <input type="text" id="name1" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="name2">Your Partner's Name</label>
+                        <input type="text" id="name2" placeholder="Enter your partner's full name">
+                    </div>
+                </div>
+                
+                <button class="btn" id="test-btn">Test Your Love</button>
+            </div>
+            
+            <div class="result-section" id="result-section">
+                <div class="animation-area" id="animation-area"></div>
+                
+                <div class="result-box">
+                    <div class="couple-photos">
+                        <img id="result-photo-1" src="" alt="Person 1">
+                        <div class="heart-connector">❤️</div>
+                        <img id="result-photo-2" src="" alt="Person 2">
+                    </div>
+                    
+                    <h2>Love Compatibility Result</h2>
+                    <div class="percentage" id="percentage">0%</div>
+                    <div class="message" id="message">Calculating your love...</div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+
+                <div class="tips-section" id="tips-section">
+                    <h3> আপনার প্রেম অনুযায়ী টিপসগুলো মেনে চলুন এবং এগিয়ে যান আরও বহুদুর ❤️‍🔥</h3>
+                    <ul class="tips-list" id="tips-list">
+                        <!-- Tips will be dynamically added here -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Love Me - 2025 | Make by Mr. Abuhurira Akash.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="tab-content" id="admin-panel">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Love Me - Admin Panel</h1>
+                <p>Monitor all love test activities and user data</p>
+            </div>
+
+            <div class="admin-stats" id="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-tests">0</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="today-tests">0</div>
+                    <div class="stat-label">Tests Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avg-percentage">0%</div>
+                    <div class="stat-label">Average Percentage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="mobile-users">0</div>
+                    <div class="stat-label">Mobile Users</div>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <button class="export-btn" onclick="exportData()">📊 Export Data to CSV</button>
+
+                <div class="filters">
+                    <input type="text" id="search-input" class="filter-input" placeholder="Search by names...">
+                    <input type="date" id="date-filter" class="filter-input">
+                    <select id="percentage-filter" class="filter-input">
+                        <option value="">All Percentages</option>
+                        <option value="90-100">90-100%</option>
+                        <option value="70-89">70-89%</option>
+                        <option value="50-69">50-69%</option>
+                        <option value="0-49">0-49%</option>
+                    </select>
+                    <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+                    <button class="filter-btn" onclick="clearFilters()" style="background: #6c757d;">Clear Filters</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Names</th>
+                                <th>Photos</th>
+                                <th>Percentage</th>
+                                <th>Device Info</th>
+                                <th>Location</th>
+                                <th>IP Address</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-body">
+                            <tr>
+                                <td colspan="7" class="loading">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passcode Modal -->
+    <div class="passcode-modal" id="passcode-modal">
+        <div class="passcode-container">
+            <h2>Admin Panel Access</h2>
+            <p>Enter the secret passcode to access the admin panel:</p>
+            <input type="password" class="passcode-input" id="passcode-input" placeholder="Enter passcode">
+            <button class="btn" id="submit-passcode">Submit</button>
+            <p class="passcode-error" id="passcode-error">Incorrect passcode. Please try again.</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCuwAamPZFxuUjbtJP_mHrRP5yXOnlpG_Y",
+            authDomain: "love-tester-web.firebaseapp.com",
+            projectId: "love-tester-web",
+            storageBucket: "love-tester-web.firebasestorage.app",
+            messagingSenderId: "597837263659",
+            appId: "1:597837263659:web:b11be2c5a397e5f42b4b6e",
+            measurementId: "G-NHT5NVF2WG"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Make Firebase available globally
+        window.firebaseDB = db;
+
+        console.log("✅ Firebase initialized successfully!");
+
+        // Tab Switching Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // If admin panel is clicked, show passcode modal
+                    if (tabId === 'admin-panel') {
+                        showPasscodeModal();
+                        return;
+                    }
+                    
+                    // Remove active class from all buttons and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    btn.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+
+                    // If admin panel is opened, load data
+                    if (tabId === 'admin-panel') {
+                        loadAdminData();
+                    }
+                });
+            });
+
+            // Initialize user panel
+            initializeUserPanel();
+            
+            // Passcode functionality
+            initializePasscodeModal();
+        });
+
+        // Passcode Modal Functions
+        function initializePasscodeModal() {
+            const passcodeModal = document.getElementById('passcode-modal');
+            const passcodeInput = document.getElementById('passcode-input');
+            const submitPasscodeBtn = document.getElementById('submit-passcode');
+            const passcodeError = document.getElementById('passcode-error');
+            
+            // Submit passcode when Enter key is pressed
+            passcodeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPasscode();
+                }
+            });
+            
+            // Submit passcode when button is clicked
+            submitPasscodeBtn.addEventListener('click', submitPasscode);
+            
+            function submitPasscode() {
+                const enteredPasscode = passcodeInput.value.trim();
+                
+                if (enteredPasscode === 'Admin9090') {
+                    // Correct passcode
+                    passcodeModal.classList.remove('active');
+                    passcodeError.style.display = 'none';
+                    passcodeInput.value = '';
+                    
+                    // Remove active class from all buttons and contents
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to admin button and content
+                    document.querySelector('[data-tab="admin-panel"]').classList.add('active');
+                    document.getElementById('admin-panel').classList.add('active');
+                    
+                    // Load admin data
+                    loadAdminData();
+                } else {
+                    // Incorrect passcode
+                    passcodeError.style.display = 'block';
+                    passcodeInput.value = '';
+                    passcodeInput.focus();
+                }
+            }
+        }
+        
+        function showPasscodeModal() {
+            const passcodeModal = document.getElementById('passcode-modal');
+            const passcodeInput = document.getElementById('passcode-input');
+            
+            passcodeModal.classList.add('active');
+            passcodeInput.focus();
+        }
+
+        // User Panel Functions
+        function initializeUserPanel() {
+            // Create floating hearts in background
+            const heartsBg = document.getElementById('hearts-bg');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                heartsBg.appendChild(heart);
+            }
+
+            // Photo upload functionality
+            const uploadBtn1 = document.getElementById('upload-btn-1');
+            const uploadBtn2 = document.getElementById('upload-btn-2');
+            const photoUpload1 = document.getElementById('photo-upload-1');
+            const photoUpload2 = document.getElementById('photo-upload-2');
+            const photoPreview1 = document.getElementById('photo-preview-1');
+            const photoPreview2 = document.getElementById('photo-preview-2');
+            const resultPhoto1 = document.getElementById('result-photo-1');
+            const resultPhoto2 = document.getElementById('result-photo-2');
+
+            let photo1Base64 = '';
+            let photo2Base64 = '';
+
+            uploadBtn1.addEventListener('click', function() {
+                photoUpload1.click();
+            });
+
+            uploadBtn2.addEventListener('click', function() {
+                photoUpload2.click();
+            });
+
+            photoUpload1.addEventListener('change', function(e) {
+                handleImageUpload(e, photoPreview1, resultPhoto1, 1);
+            });
+
+            photoUpload2.addEventListener('change', function(e) {
+                handleImageUpload(e, photoPreview2, resultPhoto2, 2);
+            });
+
+            function handleImageUpload(event, previewElement, resultElement, photoNumber) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Clear placeholder
+                        previewElement.innerHTML = '';
+                        // Create image element
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewElement.appendChild(img);
+                        
+                        // Also set the result photo
+                        resultElement.src = e.target.result;
+                        
+                        // Store base64 for Firebase
+                        if (photoNumber === 1) {
+                            photo1Base64 = e.target.result;
+                        } else {
+                            photo2Base64 = e.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            const testBtn = document.getElementById('test-btn');
+            const resultSection = document.getElementById('result-section');
+            const percentageEl = document.getElementById('percentage');
+            const messageEl = document.getElementById('message');
+            const progressEl = document.getElementById('progress');
+            const animationArea = document.getElementById('animation-area');
+            const loveAnimation = document.getElementById('love-animation');
+            const tipsSection = document.getElementById('tips-section');
+            const tipsList = document.getElementById('tips-list');
+
+            testBtn.addEventListener('click', async function() {
+                const name1 = document.getElementById('name1').value.trim();
+                const name2 = document.getElementById('name2').value.trim();
+                
+                if (!name1 || !name2) {
+                    alert('Please enter both names to test your love compatibility!');
+                    return;
+                }
+                
+                // Show result section
+                resultSection.style.display = 'block';
+                
+                // Create heart animation
+                animationArea.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-animation');
+                    heart.innerHTML = '❤';
+                    heart.style.left = (i * 20) + '%';
+                    heart.style.animationDelay = (i * 0.3) + 's';
+                    animationArea.appendChild(heart);
+                }
+                
+                // Calculate love percentage
+                const lovePercentage = calculateLove(name1, name2);
+                
+                // Animate percentage counter
+                animatePercentage(0, lovePercentage, percentageEl);
+                
+                // Animate progress bar
+                progressEl.style.width = lovePercentage + '%';
+                
+                // Set messages based on percentage
+                setMessages(lovePercentage);
+                
+                // Show love animation
+                showLoveAnimation(lovePercentage);
+                
+                // Show tips based on percentage
+                showTips(lovePercentage);
+                
+                // Save data to Firebase
+                const saved = await saveToFirebase(name1, name2, photo1Base64, photo2Base64, lovePercentage);
+                if (saved) {
+                    console.log("✅ Data saved successfully to Firebase!");
+                } else {
+                    console.log("❌ Failed to save data to Firebase");
+                }
+            });
+            
+            // Firebase save function
+            async function saveToFirebase(name1, name2, photo1, photo2, percentage) {
+                try {
+                    console.log("Saving data to Firebase...");
+                    
+                    const userData = {
+                        name1: name1,
+                        name2: name2,
+                        photo1: photo1 || null,
+                        photo2: photo2 || null,
+                        percentage: percentage,
+                        deviceInfo: getDeviceInfo(),
+                        location: await getLocation(),
+                        ip: await getIPAddress(),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    console.log("Data to save:", userData);
+                    
+                    // Save to Firestore
+                    const docRef = await window.firebaseDB.collection("loveTests").add(userData);
+                    console.log("✅ Document written with ID: ", docRef.id);
+                    
+                    return true;
+                } catch (error) {
+                    console.error("❌ Error adding document: ", error);
+                    return false;
+                }
+            }
+            
+            function getDeviceInfo() {
+                return {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    screen: `${screen.width}x${screen.height}`,
+                    deviceType: /Mobile/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+                    browser: getBrowserName(navigator.userAgent)
+                };
+            }
+            
+            function getBrowserName(userAgent) {
+                if (userAgent.includes('Chrome')) return 'Chrome';
+                if (userAgent.includes('Firefox')) return 'Firefox';
+                if (userAgent.includes('Safari')) return 'Safari';
+                if (userAgent.includes('Edge')) return 'Edge';
+                if (userAgent.includes('Opera')) return 'Opera';
+                return 'Unknown';
+            }
+            
+            async function getIPAddress() {
+                try {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    return data.ip;
+                } catch (error) {
+                    return 'Unknown';
+                }
+            }
+
+            async function getLocation() {
+                try {
+                    const response = await fetch('https://ipapi.co/json/');
+                    const data = await response.json();
+                    return `${data.city}, ${data.region}, ${data.country_name}`;
+                } catch (error) {
+                    try {
+                        const response = await fetch('https://ipinfo.io/json');
+                        const data = await response.json();
+                        return `${data.city}, ${data.region}, ${data.country}`;
+                    } catch (error2) {
+                        return 'Location unknown';
+                    }
+                }
+            }
+            
+            function calculateLove(name1, name2) {
+                // Special cases for Ripa
+                if ((name1.toLowerCase().includes('ripa') && name2.toLowerCase().includes('akash')) || 
+                    (name1.toLowerCase().includes('akash') && name2.toLowerCase().includes('ripa')) ||
+					(name1.toLowerCase().includes('আবুহুরাইরা') && name2.toLowerCase().includes('রিপা')) ||	
+					(name1.toLowerCase().includes('রিপা') && name2.toLowerCase().includes('আবুহুরাইরা ')) ||
+					(name1.toLowerCase().includes('আকাশ') && name2.toLowerCase().includes('রিপা')) ||
+					(name1.toLowerCase().includes('রিপা') && name2.toLowerCase().includes('আকাশ')) ||
+                    (name1.toLowerCase().includes('ripa') && name2.toLowerCase().includes('abuhurira')) || 
+                    (name1.toLowerCase().includes('abuhurira') && name2.toLowerCase().includes('ripa'))) {
+                    return 100;
+                }
+                
+                // Advanced algorithm for calculating love compatibility
+                const n1 = name1.toLowerCase();
+                const n2 = name2.toLowerCase();
+                
+                let baseScore = Math.abs(n1.length - n2.length);
+                baseScore = Math.max(10, 100 - baseScore * 5);
+                
+                const vowels1 = (n1.match(/[aeiou]/g) || []).length;
+                const vowels2 = (n2.match(/[aeiou]/g) || []).length;
+                const consonants1 = n1.length - vowels1;
+                const consonants2 = n2.length - vowels2;
+                
+                const vowelMatch = 100 - Math.abs(vowels1 - vowels2) * 3;
+                const consonantMatch = 100 - Math.abs(consonants1 - consonants2) * 2;
+                
+                const commonLetters = countCommonLetters(n1, n2);
+                const letterScore = Math.min(100, commonLetters * 8);
+                
+                const similarityScore = calculateSimilarity(n1, n2);
+                
+                const finalScore = (
+                    baseScore * 0.2 +
+                    vowelMatch * 0.15 +
+                    consonantMatch * 0.15 +
+                    letterScore * 0.25 +
+                    similarityScore * 0.25
+                );
+                
+                const randomFactor = 0.95 + (Math.random() * 0.1);
+                
+                return Math.min(99, Math.floor(finalScore * randomFactor));
+            }
+            
+            function countCommonLetters(str1, str2) {
+                const count1 = {};
+                const count2 = {};
+                
+                for (let char of str1) {
+                    count1[char] = (count1[char] || 0) + 1;
+                }
+                
+                for (let char of str2) {
+                    count2[char] = (count2[char] || 0) + 1;
+                }
+                
+                let common = 0;
+                for (let char in count1) {
+                    if (count2[char]) {
+                        common += Math.min(count1[char], count2[char]);
+                    }
+                }
+                
+                return common;
+            }
+            
+            function calculateSimilarity(str1, str2) {
+                const matrix = [];
+                
+                for (let i = 0; i <= str1.length; i++) {
+                    matrix[i] = [i];
+                }
+                
+                for (let j = 0; j <= str2.length; j++) {
+                    matrix[0][j] = j;
+                }
+                
+                for (let i = 1; i <= str1.length; i++) {
+                    for (let j = 1; j <= str2.length; j++) {
+                        if (str1.charAt(i-1) === str2.charAt(j-1)) {
+                            matrix[i][j] = matrix[i-1][j-1];
+                        } else {
+                            matrix[i][j] = Math.min(
+                                matrix[i-1][j-1] + 1,
+                                matrix[i][j-1] + 1,
+                                matrix[i-1][j] + 1
+                            );
+                        }
+                    }
+                }
+                
+                const distance = matrix[str1.length][str2.length];
+                const maxLength = Math.max(str1.length, str2.length);
+                
+                return 100 - (distance / maxLength) * 100;
+            }
+            
+            function animatePercentage(start, end, element) {
+                let current = start;
+                const increment = end > start ? 1 : -1;
+                const timer = setInterval(() => {
+                    current += increment;
+                    element.textContent = current + '%';
+                    
+                    if (current === end) {
+                        clearInterval(timer);
+                    }
+                }, 30);
+            }
+            
+            function setMessages(percentage) {
+                if (percentage >= 90) {
+                    messageEl.textContent = "Destiny has brought you together!";
+                } else if (percentage >= 80) {
+                    messageEl.textContent = "A truly special connection!";
+                } else if (percentage >= 70) {
+                    messageEl.textContent = "A strong and promising bond!";
+                } else if (percentage >= 60) {
+                    messageEl.textContent = "A good match with potential!";
+                } else if (percentage >= 50) {
+                    messageEl.textContent = "There's something here worth exploring!";
+                } else if (percentage >= 40) {
+                    messageEl.textContent = "This relationship needs work!";
+                } else if (percentage >= 30) {
+                    messageEl.textContent = "Challenging but not impossible!";
+                } else {
+                    messageEl.textContent = "This might be a difficult match!";
+                }
+            }
+            
+            function showLoveAnimation(percentage) {
+                loveAnimation.innerHTML = '';
+                loveAnimation.classList.add('active');
+                
+                const particleCount = Math.floor(percentage / 10) + 5;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('love-particle');
+                    particle.innerHTML = '❤';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animation = `loveFloat ${2 + Math.random() * 3}s forwards`;
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    particle.style.fontSize = (20 + Math.random() * 20) + 'px';
+                    
+                    loveAnimation.appendChild(particle);
+                }
+                
+                setTimeout(() => {
+                    loveAnimation.classList.remove('active');
+                }, 5000);
+            }
+            
+            function showTips(percentage) {
+                tipsList.innerHTML = '';
+
+                let tips = [];
+
+                if (percentage >= 90) {
+                    tips = [
+                        "আপনাদের সম্পর্ক ইতিমধ্যে খুবই শক্তিশালী, একে বজায় রাখুন। 💪",
+                        "নিয়মিত ছোট ছোট সাপ্রাইজ দিন একে অপরকে। 🎁",
+                        "একসাথে নতুন নতুন জায়গায় ভ্রমণ করুন এবং স্মৃতি তৈরি করুন। ✈️",
+                        "অন্যের সাফল্যে আনন্দ প্রকাশ করুন এবং সাপোর্ট দিন। 🌟",
+                        "একসাথে ভবিষ্যতের পরিকল্পনা করুন এবং লক্ষ্য ঠিক করুন। 🏡",
+                        "একসাথে হাসুন, কারণ হাসিই সম্পর্ককে আরও মজবুত করে। 😂"
+                    ];
+                } else if (percentage >= 80) {
+                    tips = [
+                        "নিয়মিত গভীর আলোচনা করুন এবং একে অপরের মনোভাব বুঝতে চেষ্টা করুন। 🗣️",
+                        "একসাথে নতুন শখ বা আগ্রহের বিষয় খুঁজে বের করুন। 🎨",
+                        "ছোট ছোট উপহার বা ভালোবাসার নোট দিয়ে একে অপরকে খুশি করুন। 💌",
+                        "সময় দিন এবং মনোযোগ দিয়ে শুনুন একে অপরের কথা। 👂",
+                        "একসাথে পুরনো স্মৃতি মনে করুন এবং হাসুন। 📸",
+                        "ভালোবাসা প্রকাশ করতে লজ্জা পাবেন না, তা ছোট হোক বা বড়। ❤️"
+                    ];
+                } else if (percentage >= 70) {
+                    tips = [
+                        "আরও বেশি সময় একসাথে কাটান এবং গুণগত সময় উপভোগ করুন। 🕰️",
+                        "একে অপরের স্বপ্ন এবং লক্ষ্য নিয়ে আলোচনা করুন। 🌠",
+                        "বিরোধের সময় শান্ত থাকুন এবং সমাধান খুঁজুন। 🤝",
+                        "রাগ বা মন খারাপের সময় দোষারোপ না করে সহানুভূতিশীল হোন। 🧘",
+                        "একসাথে ছোট ছোট সফলতা উদযাপন করুন। 🎉",
+                        "নিজেকে যেমন, একে অপরকেও তেমনই গ্রহণ করুন। 💫"
+                    ];
+                } else if (percentage >= 60) {
+                    tips = [
+                        "ভালো যোগাযোগের উপর ফোকাস করুন, নিজের অনুভূতি শেয়ার করুন। 💬",
+                        "একে অপরের ব্যক্তিগত জায়গা সম্মান করুন। 🙏",
+                        "সাধারণ আগ্রহের কাজ বা ক্রিয়াকলাপ খুঁজে বের করুন। 🎯",
+                        "মাঝে মাঝে একসাথে হাঁটুন বা কফি খান, সহজ মুহূর্ত উপভোগ করুন。 ☕",
+                        "সমস্যা হলে একে অপরকে সময় দিন, চাপ নয়। ⏳",
+                        "আপনি কেন প্রথমে প্রেমে পড়েছিলেন, তা মনে রাখুন। 💘"
+                    ];
+                } else if (percentage >= 50) {
+                    tips = [
+                        "আরও বেশি সময় দিন সম্পর্কটি গড়ে উঠতে। ⌛",
+                        "একে অপরের ভালো গুণগুলো নিয়ে কথা বলুন。 🌻",
+                        "ছোট ছোট বিষয়েও একে অপরের প্রশংসা করুন。 🌹",
+                        "সামান্য ভুলে রাগ করবেন না, বরং হাসিতে মিশিয়ে দিন。 😅",
+                        "একসাথে সিনেমা দেখুন বা মজার কিছু করুন。 🎬",
+                        "বিশ্বাস তৈরি করুন কথায় নয়, কাজে। 🔑"
+                    ];
+                } else if (percentage >= 40) {
+                    tips = [
+                        "ধৈর্য ধরুন এবং সম্পর্কটি বিকাশের জন্য সময় দিন。 🌱",
+                        "সৎ এবং খোলামেলা আলোচনা করুন。 💭",
+                        "একে অপরের দৃষ্টিভঙ্গি বুঝতে চেষ্টা করুন。 👀",
+                        "তর্ক নয়, বোঝাপড়া বাড়ান。 🤗",
+                        "একসাথে নতুন স্মৃতি তৈরির চেষ্টা করুন。 🏞️",
+                        "অন্যের অনুভূতিকে মূল্য দিন。 💞"
+                    ];
+                } else if (percentage >= 30) {
+                    tips = [
+                        "বিশ্বাস গড়ে তুলুন ছোট ছোট প্রতিশ্রুতি রেখে。 🤝",
+                        "একে অপরের সংস্কৃতি এবং মূল্যবোধ বুঝতে চেষ্টা করুন。 🌍",
+                        "সম্পর্কের জন্য realistic প্রত্যাশা রাখুন。 🎯",
+                        "খোলামেলা যোগাযোগ রাখুন এবং মনের কথা বলুন。 💬",
+                        "অন্যের অনুভূতিতে সম্মান দেখান。 💐",
+                        "ধৈর্য ধরে সম্পর্ককে এগিয়ে নিন。 🕊️"
+                    ];
+                } else {
+                    tips = [
+                        "সম্পর্কটি নিয়ে খুব বেশি চাপ নেবেন না, প্রাকৃতিকভাবে বিকাশ হতে দিন。 🌸",
+                        "একে অপরকে জানার জন্য সময় নিন。 ⏰",
+                        "বন্ধুত্বের ভিত্তি তৈরি করুন তারপর প্রেমের দিকে এগোন。 🤗",
+                        "ধীরে ধীরে আস্থা অর্জন করুন এবং সময় দিন。 🌿",
+                        "নিজেকে উন্নত করুন, কারণ ভালো সম্পর্ক শুরু হয় নিজের ভিতর থেকেই。 🌞",
+                        "মিষ্টি কথা বলুন, কিন্তু সত্যতা বজায় রাখুন。 🍯"
+                    ];
+                }
+                
+                tips.forEach(tip => {
+                    const li = document.createElement('li');
+                    li.textContent = tip;
+                    tipsList.appendChild(li);
+                });
+                
+                tipsSection.style.display = 'block';
+            }
+        }
+
+        // Admin Panel Functions
+        let allData = [];
+
+        async function loadAdminData() {
+            try {
+                console.log("Loading data from Firestore...");
+                
+                const querySnapshot = await window.firebaseDB.collection("loveTests")
+                    .orderBy("timestamp", "desc")
+                    .get();
+                
+                allData = [];
+                querySnapshot.forEach((doc) => {
+                    allData.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log("Data loaded:", allData.length, "records");
+                updateStats();
+                displayData(allData);
+            } catch (error) {
+                console.error("Error loading data: ", error);
+                document.getElementById('data-body').innerHTML = 
+                    '<tr><td colspan="7">Error loading data: ' + error.message + '</td></tr>';
+            }
+        }
+
+        function updateStats() {
+            const totalTests = allData.length;
+            const today = new Date().toDateString();
+            const todayTests = allData.filter(item => {
+                if (!item.timestamp) return false;
+                const itemDate = new Date(item.timestamp).toDateString();
+                return itemDate === today;
+            }).length;
+            
+            const avgPercentage = totalTests > 0 ? 
+                Math.round(allData.reduce((sum, item) => sum + (item.percentage || 0), 0) / totalTests) : 0;
+            
+            const mobileUsers = allData.filter(item => 
+                item.deviceInfo && item.deviceInfo.deviceType === 'Mobile'
+            ).length;
+
+            document.getElementById('total-tests').textContent = totalTests;
+            document.getElementById('today-tests').textContent = todayTests;
+            document.getElementById('avg-percentage').textContent = avgPercentage + '%';
+            document.getElementById('mobile-users').textContent = mobileUsers;
+        }
+
+        function displayData(data) {
+            const tbody = document.getElementById('data-body');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">No data found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>
+                        <strong>${item.name1 || 'N/A'}</strong> & <strong>${item.name2 || 'N/A'}</strong>
+                    </td>
+                    <td class="user-photos">
+                        ${item.photo1 ? `<img src="${item.photo1}" alt="${item.name1}" class="user-photo">` : 'No Photo'}
+                        ${item.photo2 ? `<img src="${item.photo2}" alt="${item.name2}" class="user-photo">` : 'No Photo'}
+                    </td>
+                    <td>
+                        <span class="percentage-badge">${item.percentage || 0}%</span>
+                    </td>
+                    <td>
+                        <span class="device-badge">${item.deviceInfo?.deviceType || 'Unknown'}</span>
+                        <br>
+                        <small>${getBrowserName(item.deviceInfo?.userAgent) || 'Unknown'}</small>
+                    </td>
+                    <td>${item.location || 'Unknown'}</td>
+                    <td>${item.ip || 'Unknown'}</td>
+                    <td>${item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Unknown'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function getBrowserName(userAgent) {
+            if (!userAgent) return 'Unknown';
+            
+            if (userAgent.includes('Chrome')) return 'Chrome';
+            if (userAgent.includes('Firefox')) return 'Firefox';
+            if (userAgent.includes('Safari')) return 'Safari';
+            if (userAgent.includes('Edge')) return 'Edge';
+            if (userAgent.includes('Opera')) return 'Opera';
+            
+            return 'Unknown';
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const dateFilter = document.getElementById('date-filter').value;
+            const percentageFilter = document.getElementById('percentage-filter').value;
+
+            let filteredData = allData;
+
+            // Search filter
+            if (searchTerm) {
+                filteredData = filteredData.filter(item => 
+                    (item.name1 && item.name1.toLowerCase().includes(searchTerm)) || 
+                    (item.name2 && item.name2.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            // Date filter
+            if (dateFilter) {
+                filteredData = filteredData.filter(item => 
+                    item.timestamp && item.timestamp.startsWith(dateFilter)
+                );
+            }
+
+            // Percentage filter
+            if (percentageFilter) {
+                const [min, max] = percentageFilter.split('-').map(Number);
+                filteredData = filteredData.filter(item => 
+                    item.percentage >= min && item.percentage <= max
+                );
+            }
+
+            displayData(filteredData);
+        }
+
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('date-filter').value = '';
+            document.getElementById('percentage-filter').value = '';
+            displayData(allData);
+        }
+
+        function exportData() {
+            const headers = ['Name 1', 'Name 2', 'Percentage', 'Device Type', 'Browser', 'Location', 'IP Address', 'Timestamp'];
+            const csvData = allData.map(item => [
+                item.name1 || 'N/A',
+                item.name2 || 'N/A',
+                item.percentage || 0,
+                item.deviceInfo?.deviceType || 'Unknown',
+                getBrowserName(item.deviceInfo?.userAgent) || 'Unknown',
+                item.location || 'Unknown',
+                item.ip || 'Unknown',
+                item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Unknown'
+            ]);
+
+            const csvContent = [headers, ...csvData]
+                .map(row => row.map(cell => `"${cell}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `love-tests-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Auto-refresh admin data every 30 seconds when admin panel is active
+        setInterval(() => {
+            if (document.getElementById('admin-panel').classList.contains('active')) {
+                loadAdminData();
+            }
+        }, 30000);
+    </script>
+</body>
+  </html>
